@@ -7,6 +7,7 @@ from . import views
 
 router = DefaultRouter()
 router.register('exams', views.ExamSheetViewset)
+router.register('tasks', views.TaskViewset)
 
 app_name = 'exam_sheet'
 

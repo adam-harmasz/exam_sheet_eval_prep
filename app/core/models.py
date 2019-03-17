@@ -72,8 +72,11 @@ class ExamSheet(models.Model):
 
 class Answer(models.Model):
     """Model handling answer objects related to Task objects"""
-    task = models.ForeignKey('Task', on_delete=models.CASCADE)
+    task = models.ForeignKey('Task',
+                             on_delete=models.CASCADE,
+                             related_name='task_answer')
     answer = models.CharField(max_length=255)
+    is_correct = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
         """String representation of the object"""
@@ -83,7 +86,9 @@ class Answer(models.Model):
 class Task(models.Model):
     """Model handling Task objects"""
     name = models.CharField(max_length=255)
-    exam_sheet = models.ForeignKey('ExamSheet', on_delete=models.CASCADE)
+    exam_sheet = models.ForeignKey('ExamSheet',
+                                   on_delete=models.CASCADE,
+                                   related_name='exam_task')
     question = models.TextField()
     user_answer = models.IntegerField(null=True, blank=True)
     points_to_achieve = models.IntegerField()
