@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from django.conf import settings
 
 
 class UserManager(BaseUserManager):
@@ -11,7 +12,6 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
         """Creates and saves new User"""
-
         if not email:
             raise ValueError("Users must have an email address")
         user = self.model(email=self.normalize_email(email), **extra_fields)
@@ -21,7 +21,6 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email, password=None):
         """Creates and saves new superuser"""
-
         user = self.create_user(email, password)
         user.is_staff = True
         user.is_superuser = True
@@ -39,3 +38,59 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+
+class ExamSheet(models.Model):
+    """Model handling Exam sheet objects"""
+    EXAM_GRADES = (
+        (1, 2),
+        (2, 2.5),
+        (3, 3),
+        (4, 3.5),
+        (5, 4),
+        (6, 4.5),
+        (7, 5)
+    )
+    name = models.CharField(max_length=255)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              on_delete=models.CASCADE,
+                              related_name='owner_sheets')
+    total_points = models.IntegerField()
+    grade = models.IntegerField(choices=EXAM_GRADES, null=True, blank=True)
+    student = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE,
+                                null=True,
+                                blank=True,
+                                related_name='student_exam')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        """String representation of the object"""
+        return f'{self.name}'
+
+
+class Answer(models.Model):
+    """Model handling answer objects related to Task objects"""
+    task = models.ForeignKey('Task', on_delete=models.CASCADE)
+    answer = models.CharField(max_length=255)
+
+    def __str__(self):
+        """String representation of the object"""
+        return f'{self.answer}'
+
+
+class Task(models.Model):
+    """Model handling Task objects"""
+    name = models.CharField(max_length=255)
+    exam_sheet = models.ForeignKey('ExamSheet', on_delete=models.CASCADE)
+    question = models.TextField()
+    user_answer = models.IntegerField(null=True, blank=True)
+    points_to_achieve = models.IntegerField()
+    is_done = models.BooleanField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        """String representation of the object"""
+        return f'{self.name}'

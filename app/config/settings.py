@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'core',
+    'exam_sheet',
 
     'django.contrib.admin',
     'django.contrib.auth',
