@@ -55,7 +55,7 @@ class ExamSheet(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE,
                               related_name='owner_sheets')
-    total_points = models.IntegerField()
+    total_points = models.IntegerField(null=True, blank=True)
     grade = models.IntegerField(choices=EXAM_GRADES, null=True, blank=True)
     student = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
