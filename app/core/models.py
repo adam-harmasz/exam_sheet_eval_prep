@@ -5,6 +5,9 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.conf import settings
+from django.db.models.signals import post_save
+
+from . import signals
 
 
 class UserManager(BaseUserManager):
@@ -75,7 +78,7 @@ class ExamSheetForStudent(BaseExamSheet):
         (6, 4.5),
         (7, 5)
     )
-    owner = models.ForeignKey (settings.AUTH_USER_MODEL,
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                                on_delete=models.CASCADE,
                                related_name='owner_student_sheets')
     student = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -115,7 +118,7 @@ class Answer(BaseAnswer):
 
 class AnswerForStudent(BaseAnswer):
     """Model handling answer objects related to Task objects"""
-    task = models.ForeignKey('Task',
+    task = models.ForeignKey('TaskForStudent',
                               on_delete=models.CASCADE,
                               related_name='student_task_answer',
                               null=True,
@@ -127,8 +130,8 @@ class BaseTask(models.Model):
     name = models.CharField(max_length=255)
     question = models.TextField()
     points_to_achieve = models.IntegerField()
-    created = models.DateTimeField (auto_now_add=True)
-    updated = models.DateTimeField (auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -140,14 +143,17 @@ class BaseTask(models.Model):
 
 class Task(BaseTask):
     """Model handling Task objects"""
-    exam_sheet = models.ForeignKey('ExamSheetForStudent',
+    exam_sheet = models.ForeignKey('ExamSheet',
                                    on_delete=models.CASCADE,
                                    related_name='exam_task')
 
 
 class TaskForStudent(BaseTask):
     """Model handling Task objects"""
-    exam_sheet = models.ForeignKey('ExamSheetForStudent',
-                                   on_delete=models.CASCADE,
-                                   related_name='student_exam_task')
-    students_answer = models.CharField(max_length=255)
+    exam_sheet_student = models.ForeignKey('ExamSheetForStudent',
+                                           on_delete=models.CASCADE,
+                                           related_name='student_exam_task')
+    students_answer = models.CharField(max_length=255, null=True, blank=True)
+
+
+post_save.connect(signals.create_exam_sheet_for_student, sender=ExamSheet)

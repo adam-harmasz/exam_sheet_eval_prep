@@ -6,7 +6,7 @@ from core import models
 
 class ExamSheetForStudentViewset(viewsets.ModelViewSet):
     """Viewset for ExamSheet objects"""
-    queryset = models.ExamSheet.objects.all()
+    queryset = models.ExamSheetForStudent.objects.all()
     serializer_class = serializers.ExamSheetForStudentSerializer
 
     def get_serializer_context(self):
@@ -15,7 +15,7 @@ class ExamSheetForStudentViewset(viewsets.ModelViewSet):
 
 class TaskForStudentViewset(viewsets.ModelViewSet):
     """Viewset for Task objects"""
-    queryset = models.Task.objects.all()
+    queryset = models.TaskForStudent.objects.all()
     serializer_class = serializers.TaskForStudentSerializer
 
     def get_serializer_context(self):
@@ -24,7 +24,7 @@ class TaskForStudentViewset(viewsets.ModelViewSet):
 
 class AnswerForStudentViewset(viewsets.ModelViewSet):
     """Viewset for Task objects"""
-    queryset = models.Answer.objects.all()
+    queryset = models.AnswerForStudent.objects.all()
     serializer_class = serializers.AnswerForStudentSerializer
 
     def get_serializer_context(self):

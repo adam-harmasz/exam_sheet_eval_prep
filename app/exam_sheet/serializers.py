@@ -22,7 +22,7 @@ class AnswerSerializer (serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     """Serializer for Task objects"""
     # task_answer = serializers.SerializerMethodField('list_of_answers')
-    task_answer = AnswerSerializer(many=True)
+    task_answer = AnswerSerializer(many=True, required=False)
     url = serializers.SerializerMethodField('task_url')
 
     class Meta:
@@ -36,10 +36,10 @@ class TaskSerializer(serializers.ModelSerializer):
                   'url')
         read_only_fields = ('id',)
 
-    def list_of_answers(self, obj):
-        """Nested Answer serializer"""
-        serializer = AnswerSerializer(obj.task_answer.all(), many=True)
-        return serializer.data
+    # def list_of_answers(self, obj):
+    #     """Nested Answer serializer"""
+    #     serializer = AnswerSerializer(obj.task_answer.all(), many=True)
+    #     return serializer.data
 
     def task_url(self, obj):
         """Add self url to serializer"""
@@ -65,12 +65,24 @@ class ExamSheetSerializer(serializers.ModelSerializer):
                   )
         read_only_fields = ('id',)
 
-    def list_of_tasks(self, obj):
-        """Nested Task serializer"""
-        serializer = TaskSerializer(obj.exam_task.all(), many=True)
-        return serializer.data
+    # def list_of_tasks(self, obj):
+    #     """Nested Task serializer"""
+    #     serializer = TaskSerializer(obj.exam_task.all(), many=True)
+    #     return serializer.data
 
     def exam_url(self, obj):
         """Add self url to serializer"""
         request = self.context.get('request')
         return reverse('exam:exam-detail', args=[obj.id], request=request)
+
+    def update(self, instance, validated_data):
+        """Updating instance"""
+        instance.is_finished = validated_data.get('is_finished', instance.is_finished)
+        instance.name = validated_data.get('name', instance.name)
+        instance.total_points = validated_data.get('total_points',
+                                                   instance.total_points)
+        instance.owner = validated_data.get('owner', instance.owner)
+        instance.number_of_copies = validated_data.get('number_of_copies',
+                                                       instance.number_of_copies)
+        instance.save()
+        return instance

@@ -17,24 +17,25 @@ class AnswerForStudentSerializer(serializers.ModelSerializer):
 class TaskForStudentSerializer(serializers.ModelSerializer):
     """Serializer for Task objects"""
     # task_answer = serializers.SerializerMethodField('list_of_answers')
-    # task_answer = AnswerSerializer(many=True)
+    student_task_answer = AnswerForStudentSerializer(many=True)
     # url = serializers.SerializerMethodField('task_url')
 
     class Meta:
         model = models.TaskForStudent
         fields = ('id',
                   'name',
-                  'exam_sheet',
+                  'exam_sheet_student',
                   'question',
                   'students_answer',
-                  'points_to_achieve')
+                  'points_to_achieve',
+                  'student_task_answer')
         read_only_fields = ('id',)
 
 
 class ExamSheetForStudentSerializer(serializers.ModelSerializer):
     """Serializer for ExamSheet objects"""
     # exam_task = serializers.SerializerMethodField('list_of_tasks')
-    # exam_task = TaskSerializer(many=True)
+    student_exam_task = TaskForStudentSerializer(many=True)
     # url = serializers.SerializerMethodField('exam_url')
 
     class Meta:
@@ -45,6 +46,7 @@ class ExamSheetForStudentSerializer(serializers.ModelSerializer):
                   'student',
                   'total_points',
                   'grade',
-                  'is_finished'
+                  'is_finished',
+                  'student_exam_task'
                   )
         read_only_fields = ('id',)
