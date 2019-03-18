@@ -40,55 +40,31 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
 
-class ExamSheet(models.Model):
-    """Model handling Exam sheet objects"""
+class BaseExamSheet(models.Model):
+    """Base abstract class for ExamSheet and ExamSheetForStudent models"""
     name = models.CharField(max_length=255)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              on_delete=models.CASCADE,
-                              related_name='owner_sheets')
     total_points = models.IntegerField(null=True, blank=True)
+    is_finished = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        """String representation of the object"""
+        return f'{self.name}'
+
+
+class ExamSheet(BaseExamSheet):
+    """Model handling Exam sheet objects"""
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                               on_delete=models.CASCADE,
+                               related_name='owner_sheets')
     number_of_copies = models.IntegerField(null=True, blank=True)
-    is_completed = models.BooleanField(default=False)
-
-    def __str__(self):
-        """String representation of the object"""
-        return f'{self.name}'
 
 
-class Answer(models.Model):
-    """Model handling answer objects related to Task objects"""
-    task = models.ForeignKey('Task',
-                             on_delete=models.CASCADE,
-                             related_name='task_answer')
-    answer = models.CharField(max_length=255)
-    is_correct = models.BooleanField(null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        """String representation of the object"""
-        return f'{self.answer}'
-
-
-class Task(models.Model):
-    """Model handling Task objects"""
-    name = models.CharField(max_length=255)
-    exam_sheet = models.ForeignKey('ExamSheet',
-                                   on_delete=models.CASCADE,
-                                   related_name='exam_task')
-    question = models.TextField()
-    points_to_achieve = models.IntegerField()
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        """String representation of the object"""
-        return f'{self.name}'
-
-
-class ExamSheetForStudent(models.Model):
+class ExamSheetForStudent(BaseExamSheet):
     """Model to create exam sheets for students objects """
     EXAM_GRADES = (
         (1, 2),
@@ -99,51 +75,79 @@ class ExamSheetForStudent(models.Model):
         (6, 4.5),
         (7, 5)
     )
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              on_delete=models.CASCADE,
-                              related_name='exam_owner')
+    owner = models.ForeignKey (settings.AUTH_USER_MODEL,
+                               on_delete=models.CASCADE,
+                               related_name='owner_student_sheets')
     student = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
                                 related_name='student_exam',
                                 null=True,
                                 blank=True,)
-    name = models.CharField(max_length=255)
     exam_sheet_origin = models.ForeignKey('ExamSheet',
                                           on_delete=models.CASCADE,
                                           related_name='student_exam_sheet')
     grade = models.IntegerField(choices=EXAM_GRADES, null=True, blank=True)
+
+
+class BaseAnswer(models.Model):
+    """Abstract base model for Answer and AnswerForStudent models"""
+    answer = models.CharField(max_length=255)
+    is_correct = models.BooleanField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    is_finished = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        """String representation of the object"""
+        return f'{self.answer}'
 
 
-class TaskForStudent(models.Model):
-    """Model handling Task objects"""
+class Answer(BaseAnswer):
+    """Model handling answer objects related to Task objects"""
+    task = models.ForeignKey ('Task',
+                              on_delete=models.CASCADE,
+                              related_name='task_answer',
+                              null=True,
+                              blank=True)
+
+
+class AnswerForStudent(BaseAnswer):
+    """Model handling answer objects related to Task objects"""
+    task = models.ForeignKey ('Task',
+                              on_delete=models.CASCADE,
+                              related_name='student_task_answer',
+                              null=True,
+                              blank=True)
+
+
+class BaseTask(models.Model):
+    """Base abstract model for Task and TaskForStudents models"""
     name = models.CharField(max_length=255)
-    exam_sheet = models.ForeignKey('ExamSheetForStudent',
-                                   on_delete=models.CASCADE,
-                                   related_name='student_exam_task')
     question = models.TextField()
-    students_answer = models.ManyToManyField('AnswerForStudent')
     points_to_achieve = models.IntegerField()
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField (auto_now_add=True)
+    updated = models.DateTimeField (auto_now=True)
+
+    class Meta:
+        abstract = True
 
     def __str__(self):
         """String representation of the object"""
         return f'{self.name}'
 
 
-class AnswerForStudent(models.Model):
-    """Model handling answer objects related to Task objects"""
-    task = models.ForeignKey('TaskForStudent',
-                             on_delete=models.CASCADE,
-                             related_name='task_answer')
-    answer = models.CharField(max_length=255)
-    is_correct = models.BooleanField(null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+class Task(models.Model):
+    """Model handling Task objects"""
+    exam_sheet = models.ForeignKey('ExamSheetForStudent',
+                                   on_delete=models.CASCADE,
+                                   related_name='exam_task')
 
-    def __str__(self):
-        """String representation of the object"""
-        return f'{self.answer}'
+
+class TaskForStudent(models.Model):
+    """Model handling Task objects"""
+    exam_sheet = models.ForeignKey('ExamSheetForStudent',
+                                   on_delete=models.CASCADE,
+                                   related_name='student_exam_task')
+    students_answer = models.CharField(max_length=255)
