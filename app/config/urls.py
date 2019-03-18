@@ -21,4 +21,5 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('sheet/', include('exam_sheet.urls', namespace='exam')),
+    path('student/', include('exam_sheet_student.urls', namespace='student')),
 ]

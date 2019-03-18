@@ -4,20 +4,18 @@ from rest_framework.reverse import reverse_lazy, reverse
 from core import models
 
 
-class AnswerSerializerForStudent(serializers.ModelSerializer):
+class AnswerForStudentSerializer(serializers.ModelSerializer):
     """Serializer for Answer objects"""
     # url = serializers.SerializerMethodField('answer_url')
 
     class Meta:
-        model = models.Answer
+        model = models.AnswerForStudent
         fields = ('id', 'task', 'answer', 'is_correct')
         read_only_fields = ('id',)
 
 
-class TaskSerializerForStudent(serializers.ModelSerializer):
+class TaskForStudentSerializer(serializers.ModelSerializer):
     """Serializer for Task objects"""
-    students_answer = serializers.ManyRelatedField(read_only=True,
-                                                   source='students_answer')
     # task_answer = serializers.SerializerMethodField('list_of_answers')
     # task_answer = AnswerSerializer(many=True)
     # url = serializers.SerializerMethodField('task_url')
@@ -33,14 +31,14 @@ class TaskSerializerForStudent(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
-class ExamSheetSerializerForStudent(serializers.ModelSerializer):
+class ExamSheetForStudentSerializer(serializers.ModelSerializer):
     """Serializer for ExamSheet objects"""
     # exam_task = serializers.SerializerMethodField('list_of_tasks')
     # exam_task = TaskSerializer(many=True)
     # url = serializers.SerializerMethodField('exam_url')
 
     class Meta:
-        model = models.ExamSheet
+        model = models.ExamSheetForStudent
         fields = ('id',
                   'name',
                   'owner',

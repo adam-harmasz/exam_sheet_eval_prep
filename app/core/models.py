@@ -106,7 +106,7 @@ class BaseAnswer(models.Model):
 
 class Answer(BaseAnswer):
     """Model handling answer objects related to Task objects"""
-    task = models.ForeignKey ('Task',
+    task = models.ForeignKey('Task',
                               on_delete=models.CASCADE,
                               related_name='task_answer',
                               null=True,
@@ -115,7 +115,7 @@ class Answer(BaseAnswer):
 
 class AnswerForStudent(BaseAnswer):
     """Model handling answer objects related to Task objects"""
-    task = models.ForeignKey ('Task',
+    task = models.ForeignKey('Task',
                               on_delete=models.CASCADE,
                               related_name='student_task_answer',
                               null=True,
@@ -138,14 +138,14 @@ class BaseTask(models.Model):
         return f'{self.name}'
 
 
-class Task(models.Model):
+class Task(BaseTask):
     """Model handling Task objects"""
     exam_sheet = models.ForeignKey('ExamSheetForStudent',
                                    on_delete=models.CASCADE,
                                    related_name='exam_task')
 
 
-class TaskForStudent(models.Model):
+class TaskForStudent(BaseTask):
     """Model handling Task objects"""
     exam_sheet = models.ForeignKey('ExamSheetForStudent',
                                    on_delete=models.CASCADE,
