@@ -37,19 +37,30 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_teacher = models.BooleanField(default=False)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
 
 
-class BaseExamSheet(models.Model):
+class BaseModel(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              on_delete=models.CASCADE,
+                              blank=True,
+                              null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class BaseExamSheet(BaseModel):
     """Base abstract class for ExamSheet and ExamSheetForStudent models"""
     name = models.CharField(max_length=255)
     total_points = models.IntegerField(null=True, blank=True)
     is_finished = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -61,9 +72,6 @@ class BaseExamSheet(models.Model):
 
 class ExamSheet(BaseExamSheet):
     """Model handling Exam sheet objects"""
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                               on_delete=models.CASCADE,
-                               related_name='owner_sheets')
     number_of_copies = models.IntegerField(null=True, blank=True)
 
 
@@ -78,9 +86,6 @@ class ExamSheetForStudent(BaseExamSheet):
         (6, 4.5),
         (7, 5)
     )
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                               on_delete=models.CASCADE,
-                               related_name='owner_student_sheets')
     student = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
                                 related_name='student_exam',
@@ -92,12 +97,10 @@ class ExamSheetForStudent(BaseExamSheet):
     grade = models.IntegerField(choices=EXAM_GRADES, null=True, blank=True)
 
 
-class BaseAnswer(models.Model):
+class BaseAnswer(BaseModel):
     """Abstract base model for Answer and AnswerForStudent models"""
     answer = models.CharField(max_length=255)
     is_correct = models.BooleanField(null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -125,13 +128,11 @@ class AnswerForStudent(BaseAnswer):
                               blank=True)
 
 
-class BaseTask(models.Model):
+class BaseTask(BaseModel):
     """Base abstract model for Task and TaskForStudents models"""
     name = models.CharField(max_length=255)
     question = models.TextField()
     points_to_achieve = models.IntegerField()
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True

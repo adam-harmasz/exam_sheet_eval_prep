@@ -7,10 +7,13 @@ from core import models
 class AnswerSerializer (serializers.ModelSerializer):
     """Serializer for Answer objects"""
     url = serializers.SerializerMethodField('answer_url')
+    owner = serializers.HiddenField (
+        default=serializers.CurrentUserDefault ()
+    )
 
     class Meta:
         model = models.Answer
-        fields = ('id', 'task', 'answer', 'is_correct', 'url')
+        fields = ('id', 'owner', 'task', 'answer', 'is_correct', 'url')
         read_only_fields = ('id',)
 
     def answer_url(self, obj):
@@ -24,10 +27,14 @@ class TaskSerializer(serializers.ModelSerializer):
     # task_answer = serializers.SerializerMethodField('list_of_answers')
     task_answer = AnswerSerializer(many=True, required=False)
     url = serializers.SerializerMethodField('task_url')
+    owner = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
 
     class Meta:
         model = models.Task
         fields = ('id',
+                  'owner',
                   'name',
                   'exam_sheet',
                   'question',
@@ -50,6 +57,9 @@ class TaskSerializer(serializers.ModelSerializer):
 class ExamSheetSerializer(serializers.ModelSerializer):
     """Serializer for ExamSheet objects"""
     # exam_task = serializers.SerializerMethodField('list_of_tasks')
+    owner = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
     exam_task = TaskSerializer(many=True, required=False)
     url = serializers.SerializerMethodField('exam_url')
 
@@ -58,10 +68,10 @@ class ExamSheetSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'name',
                   'owner',
-                  'exam_task',
                   'number_of_copies',
                   'is_finished',
                   'url',
+                  'exam_task',
                   )
         read_only_fields = ('id',)
 
