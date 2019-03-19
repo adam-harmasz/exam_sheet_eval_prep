@@ -55,7 +55,7 @@ class TaskForStudentSerializer(serializers.ModelSerializer):
 
 class ExamSheetForStudentSerializer(serializers.ModelSerializer):
     """Serializer for ExamSheet objects"""
-    student_exam_task = TaskForStudentSerializer(many=True)
+    student_exam_task = TaskForStudentSerializer(many=True, required=False)
     url = serializers.SerializerMethodField('exam_url')
 
     class Meta:
@@ -74,3 +74,14 @@ class ExamSheetForStudentSerializer(serializers.ModelSerializer):
         """Add self url to serializer"""
         request = self.context.get('request')
         return reverse('student:exam_student-detail', args=[obj.id], request=request)
+
+    def update(self, instance, validated_data):
+        """Updating ExamSheetForStudent object"""
+        instance.is_finished = validated_data.get('is_finished', instance.is_finished)
+        instance.name = validated_data.get('name', instance.name)
+        instance.total_points = validated_data.get('total_points',
+                                                    instance.total_points)
+        instance.owner = validated_data.get('owner', instance.owner)
+        instance.student = validated_data.get('student', instance.student)
+        instance.save()
+        return instance

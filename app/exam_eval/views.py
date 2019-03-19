@@ -1,3 +1,12 @@
-from django.shortcuts import render
+from rest_framework import viewsets, mixins
 
-# Create your views here.
+from exam_sheet.permissions import IsOwner, IsTeacher
+from . import serializers
+from core import models
+
+
+class ExamSheetEvalViewset(viewsets.ModelViewSet):
+    """Viewset for ExamSheetEvaluation serialized data"""
+    queryset = models.ExamSheetEvaluation.objects.all()
+    serializer_class = serializers.ExamSheetEvalSerializer
+    permission_classes = (IsOwner,)

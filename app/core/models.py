@@ -167,5 +167,7 @@ class ExamSheetEvaluation(BaseModel):
     comment = models.CharField(max_length=255, null=True, blank=True)
 
 
-# creating ExamSheet for students objects
+# creating ExamSheetForStudent objects
 post_save.connect(signals.create_exam_sheet_for_student, sender=ExamSheet)
+# creating ExamEvaluation objects
+post_save.connect(signals.create_exam_eval, sender=ExamSheetForStudent)

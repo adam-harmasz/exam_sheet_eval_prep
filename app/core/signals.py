@@ -7,7 +7,6 @@ from . import models
 
 def create_exam_sheet_for_student(sender, instance, **kwargs):
     """Signal to create multiple exam sheets"""
-
     if instance.is_finished:
         tasks = instance.exam_task.all()
         for i in range(instance.number_of_copies):
@@ -30,5 +29,26 @@ def create_exam_sheet_for_student(sender, instance, **kwargs):
                         answer=answer.answer,
                         is_correct=answer.is_correct
                     )
-    else:
-        pass
+
+
+def create_exam_eval(sender, instance, **kwargs):
+    """Creating ExamEval object if ExamSheetForStudent is finished"""
+    if instance.is_finished:
+        print('jestem w create exam eval')
+        tasks = instance.student_exam_task.all()
+        student = instance.student
+        owner = instance.owner
+        points_to_get = sum(task.points_to_achieve for task in tasks)
+        points_earned = 0
+        for task2 in tasks:
+            answer_id = int(task2.students_answer)
+            students_answer = models.AnswerForStudent.objects.get(pk=answer_id)
+            if students_answer.is_correct:
+                points_earned += task2.points_to_achieve
+        # create ExamSheetEvaluation object based on student sheet
+        models.ExamSheetEvaluation.objects.create(
+            owner=owner,
+            student=student,
+            points_to_get=points_to_get,
+            points_earned=points_earned
+        )
