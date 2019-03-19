@@ -156,6 +156,8 @@ class TaskForStudent(BaseTask):
                                            on_delete=models.CASCADE,
                                            related_name='student_exam_task')
     students_answer = models.CharField(max_length=255, null=True, blank=True)
+    # students_answer2 = models.OneToOneField('AnswerForStudent',
+    #                                         on_delete=models.CASCADE)
 
 
 post_save.connect(signals.create_exam_sheet_for_student, sender=ExamSheet)

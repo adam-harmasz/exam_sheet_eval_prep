@@ -1,10 +1,13 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 
 from . import serializers
 from core import models
 
 
-class ExamSheetForStudentViewset(viewsets.ModelViewSet):
+class ExamSheetForStudentViewset(mixins.RetrieveModelMixin,
+                                 mixins.UpdateModelMixin,
+                                 mixins.ListModelMixin,
+                                 viewsets.GenericViewSet):
     """Viewset for ExamSheet objects"""
     queryset = models.ExamSheetForStudent.objects.all()
     serializer_class = serializers.ExamSheetForStudentSerializer
@@ -13,7 +16,10 @@ class ExamSheetForStudentViewset(viewsets.ModelViewSet):
         return {'request': self.request}
 
 
-class TaskForStudentViewset(viewsets.ModelViewSet):
+class TaskForStudentViewset(mixins.RetrieveModelMixin,
+                            mixins.UpdateModelMixin,
+                            mixins.ListModelMixin,
+                            viewsets.GenericViewSet):
     """Viewset for Task objects"""
     queryset = models.TaskForStudent.objects.all()
     serializer_class = serializers.TaskForStudentSerializer
@@ -22,7 +28,10 @@ class TaskForStudentViewset(viewsets.ModelViewSet):
         return {'request': self.request}
 
 
-class AnswerForStudentViewset(viewsets.ModelViewSet):
+class AnswerForStudentViewset(mixins.RetrieveModelMixin,
+                              mixins.UpdateModelMixin,
+                              mixins.ListModelMixin,
+                              viewsets.GenericViewSet):
     """Viewset for Task objects"""
     queryset = models.AnswerForStudent.objects.all()
     serializer_class = serializers.AnswerForStudentSerializer
