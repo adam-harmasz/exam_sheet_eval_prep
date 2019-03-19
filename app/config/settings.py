@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # my apps
     'core',
+    'exam_eval',
     'exam_sheet',
     'exam_sheet_student',
     # django apps

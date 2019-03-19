@@ -78,15 +78,6 @@ class ExamSheet(BaseExamSheet):
 
 class ExamSheetForStudent(BaseExamSheet):
     """Model to create exam sheets for students objects """
-    EXAM_GRADES = (
-        (1, 2),
-        (2, 2.5),
-        (3, 3),
-        (4, 3.5),
-        (5, 4),
-        (6, 4.5),
-        (7, 5)
-    )
     student = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
                                 related_name='student_exam',
@@ -95,7 +86,6 @@ class ExamSheetForStudent(BaseExamSheet):
     exam_sheet_origin = models.ForeignKey('ExamSheet',
                                           on_delete=models.CASCADE,
                                           related_name='student_exam_sheet')
-    grade = models.IntegerField(choices=EXAM_GRADES, null=True, blank=True)
 
 
 class BaseAnswer(BaseModel):
@@ -156,8 +146,26 @@ class TaskForStudent(BaseTask):
                                            on_delete=models.CASCADE,
                                            related_name='student_exam_task')
     students_answer = models.CharField(max_length=255, null=True, blank=True)
-    # students_answer2 = models.OneToOneField('AnswerForStudent',
-    #                                         on_delete=models.CASCADE)
 
 
+class ExamSheetEvaluation(BaseModel):
+    EXAM_GRADES = (
+        (1, 2),
+        (2, 2.5),
+        (3, 3),
+        (4, 3.5),
+        (5, 4),
+        (6, 4.5),
+        (7, 5)
+    )
+    student = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE,
+                                related_name='students_exam')
+    points_to_get = models.IntegerField()
+    points_earned = models.IntegerField()
+    grade = models.IntegerField(choices=EXAM_GRADES, null=True, blank=True)
+    comment = models.CharField(max_length=255, null=True, blank=True)
+
+
+# creating ExamSheet for students objects
 post_save.connect(signals.create_exam_sheet_for_student, sender=ExamSheet)
