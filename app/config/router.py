@@ -9,6 +9,8 @@ router = DefaultRouter()
 router.register(
     'exam_eval', exam_eval_views.ExamSheetEvalViewset, base_name='exam_eval')
 router.register(
+    'student_grade', exam_eval_views.StudentGradeViewset, base_name='student_grade')
+router.register(
     'exam_sheets', exam_sheet_views.ExamSheetViewset, base_name='exam')
 router.register(
     'task_sheets', exam_sheet_views.TaskViewset, base_name='task')

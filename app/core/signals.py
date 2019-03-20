@@ -37,11 +37,13 @@ def create_exam_eval(sender, instance, **kwargs):
         tasks = instance.student_exam_task.all()
         student = instance.student
         owner = instance.owner
+        # sum of maximum points available to get
         points_to_get = sum(task.points_to_achieve for task in tasks)
         points_earned = 0
         for task2 in tasks:
             answer_id = int(task2.students_answer)
             students_answer = models.AnswerForStudent.objects.get(pk=answer_id)
+            # if asnwer is correct add points
             if students_answer.is_correct:
                 points_earned += task2.points_to_achieve
         # create ExamSheetEvaluation object based on student sheet
@@ -51,3 +53,28 @@ def create_exam_eval(sender, instance, **kwargs):
             points_to_get=points_to_get,
             points_earned=points_earned
         )
+
+
+def create_grade(sender, instance, **kwargs):
+    """Create Grade object and assign to student when exam sheet evaluation is done"""
+    if instance.is_finished:
+        print('JESTEM W CREATE GRADE')
+        owner = instance.owner
+        student = instance.student
+        grade = instance.grade
+        exam = instance
+        student_grade = models.StudentGrade.objects.filter(exam=exam)
+        if student_grade.exists():
+            student_grade.update(
+                owner=owner,
+                student=student,
+                grade=grade,
+                exam=exam
+            )
+        else:
+            models.StudentGrade.objects.create(
+                owner=owner,
+                student=student,
+                grade=grade,
+                exam=exam
+            )

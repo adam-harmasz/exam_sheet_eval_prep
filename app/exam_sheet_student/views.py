@@ -1,4 +1,5 @@
 from rest_framework import viewsets, mixins
+from django_filters import rest_framework as filters
 
 from . import serializers
 from core import models
@@ -11,6 +12,8 @@ class ExamSheetForStudentViewset(mixins.RetrieveModelMixin,
     """Viewset for ExamSheet objects"""
     queryset = models.ExamSheetForStudent.objects.all()
     serializer_class = serializers.ExamSheetForStudentSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('name', 'exam_task', 'is_finished', 'owner')
 
     def get_serializer_context(self):
         # print(self.get_object(), 'obiekt w viewset')

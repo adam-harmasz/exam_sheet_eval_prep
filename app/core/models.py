@@ -168,6 +168,10 @@ class ExamSheetEvaluation(BaseModel):
     comment = models.CharField(max_length=255, null=True, blank=True)
     is_finished = models.BooleanField(default=False)
 
+    def __str__(self):
+        """String representation of the object"""
+        return f'Exam evaluation - {self.student}'
+
 
 class StudentGrade(BaseModel):
     """Model handling StudentGrade objects"""
@@ -177,8 +181,14 @@ class StudentGrade(BaseModel):
     grade = models.FloatField()
     exam = models.OneToOneField('ExamSheetEvaluation', on_delete=models.CASCADE)
 
+    def __str__(self):
+        """String representation of the object"""
+        return f'{self.student} grade: {self.grade}'
+
 
 # creating ExamSheetForStudent objects
 post_save.connect(signals.create_exam_sheet_for_student, sender=ExamSheet)
-# creating ExamEvaluation objects
+# creating ExamEvaluation object
 post_save.connect(signals.create_exam_eval, sender=ExamSheetForStudent)
+# creating StudentGrade object
+post_save.connect(signals.create_grade, sender=ExamSheetEvaluation)
