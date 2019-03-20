@@ -55,7 +55,7 @@ class TaskForStudentSerializer(serializers.ModelSerializer):
 
 class OpenTaskForStudentSerializer(serializers.ModelSerializer):
     """Serializer for OpenTaskForStudents objects"""
-    url = serializers.SerializerMethodField('task_url')
+    url = serializers.SerializerMethodField()
 
     class Meta:
         model = models.OpenTaskForStudent
@@ -76,6 +76,7 @@ class OpenTaskForStudentSerializer(serializers.ModelSerializer):
 class ExamSheetForStudentSerializer(serializers.ModelSerializer):
     """Serializer for ExamSheet objects"""
     student_exam_task = TaskForStudentSerializer(many=True, required=False)
+    open_exam_task = OpenTaskForStudentSerializer(many=True, required=False)
     url = serializers.SerializerMethodField('exam_url')
 
     class Meta:
@@ -86,6 +87,7 @@ class ExamSheetForStudentSerializer(serializers.ModelSerializer):
                   'total_points',
                   'is_finished',
                   'student_exam_task',
+                  'open_exam_task',
                   'url')
         read_only_fields = ('id', 'total_points')
 

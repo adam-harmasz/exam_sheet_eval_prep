@@ -76,11 +76,6 @@ class ExamSheetSerializer(serializers.ModelSerializer):
                   )
         read_only_fields = ('id',)
 
-    # def list_of_tasks(self, obj):
-    #     """Nested Task serializer"""
-    #     serializer = TaskSerializer(obj.exam_task.all(), many=True)
-    #     return serializer.data
-
     def exam_url(self, obj):
         """Add self url to serializer"""
         request = self.context.get('request')
