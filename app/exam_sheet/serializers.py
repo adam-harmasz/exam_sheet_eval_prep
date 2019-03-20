@@ -8,7 +8,7 @@ class AnswerSerializer (serializers.ModelSerializer):
     """Serializer for Answer objects"""
     url = serializers.SerializerMethodField('answer_url')
     owner = serializers.HiddenField (
-        default=serializers.CurrentUserDefault ()
+        default=serializers.CurrentUserDefault()
     )
 
     class Meta:
@@ -19,7 +19,7 @@ class AnswerSerializer (serializers.ModelSerializer):
     def answer_url(self, obj):
         """Add self url to serializer"""
         request = self.context.get('request')
-        return reverse('exam:answer-detail', args=[obj.id], request=request)
+        return reverse('answer-detail', args=[obj.id], request=request)
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -51,7 +51,7 @@ class TaskSerializer(serializers.ModelSerializer):
     def task_url(self, obj):
         """Add self url to serializer"""
         request = self.context.get('request')
-        return reverse('exam:task-detail', args=[obj.id], request=request)
+        return reverse('task-detail', args=[obj.id], request=request)
 
 
 class ExamSheetSerializer(serializers.ModelSerializer):
@@ -83,7 +83,7 @@ class ExamSheetSerializer(serializers.ModelSerializer):
     def exam_url(self, obj):
         """Add self url to serializer"""
         request = self.context.get('request')
-        return reverse('exam:exam-detail', args=[obj.id], request=request)
+        return reverse('exam-detail', args=[obj.id], request=request)
 
     def update(self, instance, validated_data):
         """Updating instance"""

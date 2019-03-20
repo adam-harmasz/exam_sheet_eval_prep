@@ -13,6 +13,7 @@ class ExamSheetForStudentViewset(mixins.RetrieveModelMixin,
     serializer_class = serializers.ExamSheetForStudentSerializer
 
     def get_serializer_context(self):
+        # print(self.get_object(), 'obiekt w viewset')
         return {'request': self.request}
 
 

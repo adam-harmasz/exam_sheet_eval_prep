@@ -35,7 +35,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model using email instead of username"""
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
@@ -141,7 +142,7 @@ class Task(BaseTask):
 
 
 class TaskForStudent(BaseTask):
-    """Model handling Task objects"""
+    """Model handling TaskForStudent objects"""
     exam_sheet_student = models.ForeignKey('ExamSheetForStudent',
                                            on_delete=models.CASCADE,
                                            related_name='student_exam_task')
@@ -165,6 +166,16 @@ class ExamSheetEvaluation(BaseModel):
     points_earned = models.IntegerField()
     grade = models.IntegerField(choices=EXAM_GRADES, null=True, blank=True)
     comment = models.CharField(max_length=255, null=True, blank=True)
+    is_finished = models.BooleanField(default=False)
+
+
+class StudentGrade(BaseModel):
+    """Model handling StudentGrade objects"""
+    student = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE,
+                                related_name='student_grade')
+    grade = models.FloatField()
+    exam = models.OneToOneField('ExamSheetEvaluation', on_delete=models.CASCADE)
 
 
 # creating ExamSheetForStudent objects

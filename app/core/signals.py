@@ -34,7 +34,6 @@ def create_exam_sheet_for_student(sender, instance, **kwargs):
 def create_exam_eval(sender, instance, **kwargs):
     """Creating ExamEval object if ExamSheetForStudent is finished"""
     if instance.is_finished:
-        print('jestem w create exam eval')
         tasks = instance.student_exam_task.all()
         student = instance.student
         owner = instance.owner

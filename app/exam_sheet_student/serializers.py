@@ -16,12 +16,12 @@ class AnswerForStudentSerializer(serializers.ModelSerializer):
     def answer_url(self, obj):
         """Add self url to serializer"""
         request = self.context.get('request')
-        return reverse('student:answer_student-detail', args=[obj.id], request=request)
+        return reverse('answer_student-detail', args=[obj.id], request=request)
 
 
 class TaskForStudentSerializer(serializers.ModelSerializer):
     """Serializer for Task objects"""
-    student_task_answer = AnswerForStudentSerializer(many=True, read_only=True)
+    student_task_answer = AnswerForStudentSerializer(many=True, required=False)
     student_task_answer_id = serializers.IntegerField(write_only=True)
     url = serializers.SerializerMethodField('task_url')
 
@@ -50,7 +50,7 @@ class TaskForStudentSerializer(serializers.ModelSerializer):
     def task_url(self, obj):
         """Add self url to serializer"""
         request = self.context.get('request')
-        return reverse('student:task_student-detail', args=[obj.id], request=request)
+        return reverse('task_student-detail', args=[obj.id], request=request)
 
 
 class ExamSheetForStudentSerializer(serializers.ModelSerializer):
@@ -73,7 +73,7 @@ class ExamSheetForStudentSerializer(serializers.ModelSerializer):
     def exam_url(self, obj):
         """Add self url to serializer"""
         request = self.context.get('request')
-        return reverse('student:exam_student-detail', args=[obj.id], request=request)
+        return reverse('exam_student-detail', args=[obj.id], request=request)
 
     def update(self, instance, validated_data):
         """Updating ExamSheetForStudent object"""

@@ -32,9 +32,9 @@ class TaskViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return models.ExamSheet.objects.all()
+            return models.Task.objects.all()
         elif self.request.user.is_teacher:
-            return models.ExamSheet.objects.filter(id=self.request.user.id)
+            return models.Task.objects.filter(id=self.request.user.id)
 
 
 class AnswerViewset(viewsets.ModelViewSet):
@@ -47,6 +47,6 @@ class AnswerViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return models.ExamSheet.objects.all()
+            return models.Answer.objects.all()
         elif self.request.user.is_teacher:
-            return models.ExamSheet.objects.filter(id=self.request.user.id)
+            return models.Answer.objects.filter(id=self.request.user.id)
