@@ -1,7 +1,7 @@
 from rest_framework import viewsets, mixins
 from django_filters import rest_framework as filters
 
-from exam_sheet.permissions import IsOwner, IsTeacher
+from core.permissions import IsOwner, IsTeacher
 from . import serializers
 from core import models
 
@@ -29,3 +29,5 @@ class TaskToEvaluateViewset(viewsets.ModelViewSet):
     """Viewset for TaskToEvaluate serialized data"""
     queryset = models.TaskToEvaluate.objects.all()
     serializer_class = serializers.TaskToEvaluateSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('name', 'owner')

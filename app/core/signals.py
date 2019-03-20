@@ -14,6 +14,7 @@ def create_exam_sheet_for_student(sender, instance, **kwargs):
             for task in tasks:
                 if task.is_open_task:
                     models.OpenTaskForStudent.objects.create(
+                        owner=task.owner,
                         name=task.name,
                         question=task.question,
                         points_to_achieve=task.points_to_achieve,

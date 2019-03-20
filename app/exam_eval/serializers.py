@@ -12,6 +12,12 @@ class StudentGradeSerializer(serializers.ModelSerializer):
         fields = ('id', 'student', 'grade', 'exam')
         read_only_fields = ('id',)
 
+    def validate_grade(self, attrs):
+        """Validate grade"""
+        if 0 < attrs < 8:
+            return attrs
+        raise serializers.ValidationError('Grade value has to be in range 1-7')
+
 
 class TaskToEvaluateSerializer(serializers.ModelSerializer):
     """Serializer for TaskToEvaluate objects"""
@@ -23,6 +29,7 @@ class TaskToEvaluateSerializer(serializers.ModelSerializer):
                   'name',
                   'question',
                   'students_answer',
+                  'points_to_achieve',
                   'points_earned',
                   'url')
         read_only_fields = ('id', 'name')
@@ -48,6 +55,15 @@ class TaskToEvaluateSerializer(serializers.ModelSerializer):
         instance.exam.save()
         return instance
 
+    def validate(self, attrs):
+        """Validate points earned"""
+        points_earned = attrs.get('points_earned')
+        points_to_achieve = attrs.get('points_to_achieve')
+        if points_earned > points_to_achieve:
+            raise serializers.ValidationError(
+                'Field points earned cannot be bigger than points to achieve')
+        return attrs
+
 
 class ExamSheetEvalSerializer(serializers.ModelSerializer):
     """Serializer for ExamEvaluation objects"""
@@ -71,3 +87,12 @@ class ExamSheetEvalSerializer(serializers.ModelSerializer):
         """Create self url for serialized object"""
         request = self.context.get('request')
         return reverse('exam_eval-detail', args=[obj.id], request=request)
+
+    def validate(self, attrs):
+        """Validate points earned"""
+        points_earned = attrs.get('points_earned')
+        points_to_get = attrs.get('points_to_get')
+        if points_earned > points_to_get:
+            raise serializers.ValidationError(
+                'Field points earned cannot be bigger than points to get')
+        return attrs

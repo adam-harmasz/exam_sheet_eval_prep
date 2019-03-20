@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from django_filters import rest_framework as filters
 
-from .permissions import IsOwner, IsTeacher
+from core.permissions import IsOwner, IsTeacher
 from . import serializers
 from core import models
 

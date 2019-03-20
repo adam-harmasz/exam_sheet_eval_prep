@@ -187,7 +187,8 @@ class ExamSheetEvaluation(BaseModel):
 class TaskToEvaluate(BaseTask):
     """Model handling TaskToEvaluate objects"""
     students_answer = models.TextField()
-    points_earned = models.IntegerField (null=True, blank=True)
+    points_to_achieve = models.IntegerField(null=True, blank=True)
+    points_earned = models.IntegerField(null=True, blank=True)
     exam = models.ForeignKey('ExamSheetEvaluation',
                              on_delete=models.CASCADE,
                              related_name='exam_task_eval')
