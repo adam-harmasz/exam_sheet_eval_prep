@@ -67,6 +67,7 @@ def create_exam_eval(sender, instance, **kwargs):
             for open_task in open_tasks:
                 models.TaskToEvaluate.objects.create(
                     owner=open_task.owner,
+                    name=open_task.name,
                     question=open_task.question,
                     points_to_achieve=open_task.points_to_achieve,
                     students_answer=open_task.students_answer,
