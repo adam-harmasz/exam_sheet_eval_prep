@@ -21,6 +21,14 @@ class AnswerSerializer (serializers.ModelSerializer):
         request = self.context.get('request')
         return reverse('answer-detail', args=[obj.id], request=request)
 
+    def validate(self, attrs):
+        """object validation"""
+        task = attrs.get('task')
+        if task.is_open_task:
+            raise serializers.ValidationError(
+                'This task cannot be assigned it is open one')
+        return attrs
+
 
 class TaskSerializer(serializers.ModelSerializer):
     """Serializer for Task objects"""

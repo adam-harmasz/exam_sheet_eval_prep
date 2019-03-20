@@ -49,11 +49,12 @@ def create_exam_eval(sender, instance, **kwargs):
         points_to_get = task_points + open_task_points
         points_earned = 0
         for task_ in tasks:
-            answer_id = int(task_.students_answer)
-            students_answer = models.AnswerForStudent.objects.get(pk=answer_id)
-            # if answer is correct add points
-            if students_answer.is_correct:
-                points_earned += task_.points_to_achieve
+            answer_id = task_.students_answer
+            if answer_id:
+                students_answer = models.AnswerForStudent.objects.get(pk=answer_id)
+                # if answer is correct add points
+                if students_answer.is_correct:
+                    points_earned += task_.points_to_achieve
         # create ExamSheetEvaluation object based on student sheet
         exam = models.ExamSheetEvaluation.objects.create(
             owner=owner,

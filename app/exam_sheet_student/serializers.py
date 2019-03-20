@@ -56,7 +56,7 @@ class TaskForStudentSerializer(serializers.ModelSerializer):
         """Object validation"""
         instance = self.instance
         answers_query = instance.student_task_answer.all()
-        list_of_ids = [id_ for id_ in answers_query]
+        list_of_ids = [id_.id for id_ in answers_query]
         student_task_answer_id = attrs.get('student_task_answer_id')
         if student_task_answer_id in list_of_ids:
             return attrs
