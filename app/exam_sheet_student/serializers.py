@@ -52,6 +52,16 @@ class TaskForStudentSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         return reverse('task_student-detail', args=[obj.id], request=request)
 
+    def validate(self, attrs):
+        """Object validation"""
+        instance = self.instance
+        answers_query = instance.student_task_answer.all()
+        list_of_ids = [id_ for id_ in answers_query]
+        student_task_answer_id = attrs.get('student_task_answer_id')
+        if student_task_answer_id in list_of_ids:
+            return attrs
+        raise serializers.ValidationError('Invalid answer')
+
 
 class OpenTaskForStudentSerializer(serializers.ModelSerializer):
     """Serializer for OpenTaskForStudents objects"""

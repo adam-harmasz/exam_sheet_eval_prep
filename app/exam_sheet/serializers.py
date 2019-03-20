@@ -7,7 +7,7 @@ from core import models
 class AnswerSerializer (serializers.ModelSerializer):
     """Serializer for Answer objects"""
     url = serializers.SerializerMethodField('answer_url')
-    owner = serializers.HiddenField (
+    owner = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
 
@@ -43,11 +43,6 @@ class TaskSerializer(serializers.ModelSerializer):
                   'is_open_task',
                   'url')
         read_only_fields = ('id',)
-
-    # def list_of_answers(self, obj):
-    #     """Nested Answer serializer"""
-    #     serializer = AnswerSerializer(obj.task_answer.all(), many=True)
-    #     return serializer.data
 
     def task_url(self, obj):
         """Add self url to serializer"""

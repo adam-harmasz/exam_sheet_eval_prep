@@ -6,11 +6,17 @@ from core import models
 
 class StudentGradeSerializer(serializers.ModelSerializer):
     """Serializer for StudentGrade objects"""
+    url = serializers.SerializerMethodField()
 
     class Meta:
         model = models.StudentGrade
-        fields = ('id', 'student', 'grade', 'exam')
+        fields = ('id', 'student', 'grade', 'exam', 'url')
         read_only_fields = ('id',)
+
+    def get_url(self, obj):
+        """Create self url for serialized object"""
+        request = self.context.get('request')
+        return reverse('student_grade-detail', args=[obj.id], request=request)
 
     def validate_grade(self, attrs):
         """Validate grade"""
