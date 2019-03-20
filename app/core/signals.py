@@ -52,7 +52,7 @@ def create_exam_eval(sender, instance, **kwargs):
             if students_answer.is_correct:
                 points_earned += task_.points_to_achieve
         # create ExamSheetEvaluation object based on student sheet
-        exam = models.ExamSheetEvaluation.objects.create (
+        exam = models.ExamSheetEvaluation.objects.create(
             owner=owner,
             student=student,
             points_to_get=points_to_get,
@@ -68,7 +68,6 @@ def create_exam_eval(sender, instance, **kwargs):
                     students_answer=open_task.students_answer,
                     exam=exam
                 )
-
 
 
 def create_grade(sender, instance, **kwargs):

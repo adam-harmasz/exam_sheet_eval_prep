@@ -27,5 +27,5 @@ class StudentGradeViewset(mixins.ListModelMixin,
 
 class TaskToEvaluateViewset(viewsets.ModelViewSet):
     """Viewset for TaskToEvaluate serialized data"""
-    queryset = models.TaskToEvaluate.objects.all
+    queryset = models.TaskToEvaluate.objects.all()
     serializer_class = serializers.TaskToEvaluate

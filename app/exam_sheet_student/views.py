@@ -32,6 +32,18 @@ class TaskForStudentViewset(mixins.RetrieveModelMixin,
         return {'request': self.request}
 
 
+class OpenTaskForStudentViewset(mixins.RetrieveModelMixin,
+                            mixins.UpdateModelMixin,
+                            mixins.ListModelMixin,
+                            viewsets.GenericViewSet):
+    """Viewset for Task objects"""
+    queryset = models.OpenTaskForStudent.objects.all()
+    serializer_class = serializers.OpenTaskForStudentSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+
 class AnswerForStudentViewset(mixins.RetrieveModelMixin,
                               mixins.UpdateModelMixin,
                               mixins.ListModelMixin,

@@ -11,7 +11,7 @@ router.register(
 router.register(
     'student_grade', exam_eval_views.StudentGradeViewset, base_name='student_grade')
 router.register(
-    'task_eval', exam_eval_views.TaskToEvaluateViewset, base_name='student_grade')
+    'task_eval', exam_eval_views.TaskToEvaluateViewset, base_name='task_eval')
 router.register(
     'exam_sheets', exam_sheet_views.ExamSheetViewset, base_name='exam')
 router.register(
@@ -22,6 +22,8 @@ router.register(
     'exam_student', student_views.ExamSheetForStudentViewset, base_name='exam_student')
 router.register(
     'task_student', student_views.TaskForStudentViewset, base_name='task_student')
+router.register(
+    'open_task_student', student_views.OpenTaskForStudentViewset, base_name='open_task')
 router.register(
     'answer_student', student_views.AnswerForStudentViewset, base_name='answer_student')
 

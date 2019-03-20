@@ -43,10 +43,8 @@ class TaskToEvaluate(serializers.ModelSerializer):
         model = models.TaskToEvaluate
         fields = ('id',
                   'name',
-                  'exam_sheet_student',
                   'question',
                   'students_answer',
-                  'is_open_task',
                   'url')
         read_only_fields = ('id',)
 

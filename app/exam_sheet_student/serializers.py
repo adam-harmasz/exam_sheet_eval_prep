@@ -34,7 +34,6 @@ class TaskForStudentSerializer(serializers.ModelSerializer):
                   'students_answer',
                   'student_task_answer',
                   'student_task_answer_id',
-                  'is_open_task',
                   'url')
         read_only_fields = ('id',
                             'name',
@@ -52,6 +51,26 @@ class TaskForStudentSerializer(serializers.ModelSerializer):
         """Add self url to serializer"""
         request = self.context.get('request')
         return reverse('task_student-detail', args=[obj.id], request=request)
+
+
+class OpenTaskForStudentSerializer(serializers.ModelSerializer):
+    """Serializer for OpenTaskForStudents objects"""
+    url = serializers.SerializerMethodField('task_url')
+
+    class Meta:
+        model = models.OpenTaskForStudent
+        fields = ('id',
+                  'name',
+                  'exam_sheet_student',
+                  'question',
+                  'students_answer',
+                  'url')
+        read_only_fields = ('id', 'name', 'exam_sheet_student', 'question',)
+
+    def get_url(self, obj):
+        """Add self url to serializer"""
+        request = self.context.get('request')
+        return reverse('open_task-detail', args=[obj.id], request=request)
 
 
 class ExamSheetForStudentSerializer(serializers.ModelSerializer):
