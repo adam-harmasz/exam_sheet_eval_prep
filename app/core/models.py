@@ -139,6 +139,7 @@ class Task(BaseTask):
     exam_sheet = models.ForeignKey('ExamSheet',
                                    on_delete=models.CASCADE,
                                    related_name='exam_task')
+    is_open_task = models.BooleanField(default=False)
 
 
 class TaskForStudent(BaseTask):
@@ -146,10 +147,19 @@ class TaskForStudent(BaseTask):
     exam_sheet_student = models.ForeignKey('ExamSheetForStudent',
                                            on_delete=models.CASCADE,
                                            related_name='student_exam_task')
-    students_answer = models.CharField(max_length=255, null=True, blank=True)
+    students_answer = models.IntegerField(null=True, blank=True)
+
+
+class OpenTaskForStudent(BaseTask):
+    """Model handling TaskForStudent objects"""
+    exam_sheet_student = models.ForeignKey('ExamSheetForStudent',
+                                            on_delete=models.CASCADE,
+                                            related_name='open_exam_task')
+    students_answer = models.TextField(null=True, blank=True)
 
 
 class ExamSheetEvaluation(BaseModel):
+    """Model handling ExamSheetEvaluation objects"""
     EXAM_GRADES = (
         (1, 2),
         (2, 2.5),
@@ -164,6 +174,7 @@ class ExamSheetEvaluation(BaseModel):
                                 related_name='students_exam')
     points_to_get = models.IntegerField()
     points_earned = models.IntegerField()
+    score_in_percents = models.FloatField(null=True, blank=True)
     grade = models.IntegerField(choices=EXAM_GRADES, null=True, blank=True)
     comment = models.CharField(max_length=255, null=True, blank=True)
     is_finished = models.BooleanField(default=False)
@@ -171,6 +182,15 @@ class ExamSheetEvaluation(BaseModel):
     def __str__(self):
         """String representation of the object"""
         return f'Exam evaluation - {self.student}'
+
+
+class TaskToEvaluate(BaseTask):
+    """Model handling TaskToEvaluate objects"""
+    students_answer = models.TextField()
+    points_earned = models.IntegerField (null=True, blank=True)
+    exam = models.ForeignKey('ExamSheetEvaluation',
+                             on_delete=models.CASCADE,
+                             related_name='exam_task_eval')
 
 
 class StudentGrade(BaseModel):

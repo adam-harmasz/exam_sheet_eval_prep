@@ -34,6 +34,7 @@ class TaskForStudentSerializer(serializers.ModelSerializer):
                   'students_answer',
                   'student_task_answer',
                   'student_task_answer_id',
+                  'is_open_task',
                   'url')
         read_only_fields = ('id',
                             'name',
@@ -66,8 +67,7 @@ class ExamSheetForStudentSerializer(serializers.ModelSerializer):
                   'total_points',
                   'is_finished',
                   'student_exam_task',
-                  'url'
-                  )
+                  'url')
         read_only_fields = ('id', 'total_points')
 
     def exam_url(self, obj):

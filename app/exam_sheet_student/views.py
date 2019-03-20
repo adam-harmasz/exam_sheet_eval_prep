@@ -13,7 +13,7 @@ class ExamSheetForStudentViewset(mixins.RetrieveModelMixin,
     queryset = models.ExamSheetForStudent.objects.all()
     serializer_class = serializers.ExamSheetForStudentSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filterset_fields = ('name', 'exam_task', 'is_finished', 'owner')
+    filterset_fields = ('name', 'student_exam_task', 'is_finished', 'owner')
 
     def get_serializer_context(self):
         # print(self.get_object(), 'obiekt w viewset')

@@ -23,3 +23,9 @@ class StudentGradeViewset(mixins.ListModelMixin,
     serializer_class = serializers.StudentGradeSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_fields = ('student', 'grade')
+
+
+class TaskToEvaluateViewset(viewsets.ModelViewSet):
+    """Viewset for TaskToEvaluate serialized data"""
+    queryset = models.TaskToEvaluate.objects.all
+    serializer_class = serializers.TaskToEvaluate

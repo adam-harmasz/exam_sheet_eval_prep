@@ -40,6 +40,7 @@ class TaskSerializer(serializers.ModelSerializer):
                   'question',
                   'task_answer',
                   'points_to_achieve',
+                  'is_open_task',
                   'url')
         read_only_fields = ('id',)
 
