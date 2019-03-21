@@ -1,4 +1,4 @@
-# EXAM SHEET PREPARATION AND EVALUATION REST API
+# EXAM SHEET PREPARATION AND EVALUATION 
 
 This is an application to help with the process of preparing and evaluating exams. User(teacher)
 can prepare schema of the exam and make as many copies as he needs to, and then after student
