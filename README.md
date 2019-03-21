@@ -49,6 +49,7 @@ This application has 4 parts:
         - '/exam/api/v1/task_eval/', enpoint with open tasks which are ready to be evaluated  
         
 To create exam schema and evaluate it:  
+
     - You need to choose name of the schema and number of copies you require  
     - Assign tasks to your exam   
     - Assign answers to your tasks(not open ones)  
