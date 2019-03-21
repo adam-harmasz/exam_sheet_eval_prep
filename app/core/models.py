@@ -175,7 +175,6 @@ class ExamSheetEvaluation(BaseModel):
                                 related_name='students_exam')
     points_to_get = models.IntegerField()
     points_earned = models.IntegerField()
-    score_in_percents = models.FloatField(null=True, blank=True)
     grade = models.IntegerField(choices=EXAM_GRADES, null=True, blank=True)
     comment = models.CharField(max_length=255, null=True, blank=True)
     is_finished = models.BooleanField(default=False)

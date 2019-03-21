@@ -6,7 +6,10 @@ from . import serializers
 from core import models
 
 
-class ExamSheetEvalViewset(viewsets.ModelViewSet):
+class ExamSheetEvalViewset(mixins.ListModelMixin,
+                           mixins.UpdateModelMixin,
+                          mixins.RetrieveModelMixin,
+                          viewsets.GenericViewSet):
     """Viewset for ExamSheetEvaluation serialized data"""
     queryset = models.ExamSheetEvaluation.objects.all()
     serializer_class = serializers.ExamSheetEvalSerializer
