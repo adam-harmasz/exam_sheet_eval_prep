@@ -6,19 +6,27 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0004_auto_20190318_1814'),
-    ]
+    dependencies = [("core", "0004_auto_20190318_1814")]
 
     operations = [
         migrations.AlterField(
-            model_name='answerforstudent',
-            name='task',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='student_task_answer', to='core.TaskForStudent'),
+            model_name="answerforstudent",
+            name="task",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="student_task_answer",
+                to="core.TaskForStudent",
+            ),
         ),
         migrations.AlterField(
-            model_name='task',
-            name='exam_sheet',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='exam_task', to='core.ExamSheet'),
+            model_name="task",
+            name="exam_sheet",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="exam_task",
+                to="core.ExamSheet",
+            ),
         ),
     ]

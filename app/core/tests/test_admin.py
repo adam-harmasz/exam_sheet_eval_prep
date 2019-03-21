@@ -9,20 +9,18 @@ class AdminTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
-            email='test@test.pl',
-            password='test1234567'
+            email="test@test.pl", password="test1234567"
         )
 
         self.client.force_login(self.admin_user)
         self.user = get_user_model().objects.create_user(
-            email='test1@test.pl',
-            password='test123123'
+            email="test1@test.pl", password="test123123"
         )
 
     def test_user_listed(self):
         """Test that users are listed on user page"""
 
-        url = reverse('admin:core_user_changelist')
+        url = reverse("admin:core_user_changelist")
         res = self.client.get(url)
 
         self.assertContains(res, self.user.name)
@@ -31,7 +29,7 @@ class AdminTest(TestCase):
     def test_user_change_change_page(self):
         """Test user edit page"""
 
-        url = reverse('admin:core_user_change', args=[self.user.id])
+        url = reverse("admin:core_user_change", args=[self.user.id])
         res = self.client.get(url)
 
         self.assertEqual(res.status_code, 200)
@@ -39,7 +37,7 @@ class AdminTest(TestCase):
     def test_create_user_page(self):
         """Test create user page"""
 
-        url = reverse('admin:core_user_add')
+        url = reverse("admin:core_user_add")
         res = self.client.get(url)
 
         self.assertEqual(res.status_code, 200)

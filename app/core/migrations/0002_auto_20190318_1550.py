@@ -7,67 +7,72 @@ from django.utils.timezone import utc
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0001_initial'),
-    ]
+    dependencies = [("core", "0001_initial")]
 
     operations = [
         migrations.AddField(
-            model_name='task',
-            name='created',
-            field=models.DateTimeField(auto_now_add=True, default=datetime.datetime(2019, 3, 18, 15, 48, 45, 979922, tzinfo=utc)),
+            model_name="task",
+            name="created",
+            field=models.DateTimeField(
+                auto_now_add=True,
+                default=datetime.datetime(2019, 3, 18, 15, 48, 45, 979922, tzinfo=utc),
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='task',
-            name='name',
-            field=models.CharField(default=datetime.datetime(2019, 3, 18, 15, 48, 58, 352489, tzinfo=utc), max_length=255),
+            model_name="task",
+            name="name",
+            field=models.CharField(
+                default=datetime.datetime(2019, 3, 18, 15, 48, 58, 352489, tzinfo=utc),
+                max_length=255,
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='task',
-            name='points_to_achieve',
+            model_name="task",
+            name="points_to_achieve",
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='task',
-            name='question',
-            field=models.TextField(default='question'),
+            model_name="task",
+            name="question",
+            field=models.TextField(default="question"),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='task',
-            name='updated',
-            field=models.DateTimeField(auto_now=True),
+            model_name="task", name="updated", field=models.DateTimeField(auto_now=True)
         ),
         migrations.AddField(
-            model_name='taskforstudent',
-            name='created',
-            field=models.DateTimeField(auto_now_add=True, default=datetime.datetime(2019, 3, 18, 15, 49, 39, 116289, tzinfo=utc)),
+            model_name="taskforstudent",
+            name="created",
+            field=models.DateTimeField(
+                auto_now_add=True,
+                default=datetime.datetime(2019, 3, 18, 15, 49, 39, 116289, tzinfo=utc),
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='taskforstudent',
-            name='name',
-            field=models.CharField(default='name1', max_length=255),
+            model_name="taskforstudent",
+            name="name",
+            field=models.CharField(default="name1", max_length=255),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='taskforstudent',
-            name='points_to_achieve',
+            model_name="taskforstudent",
+            name="points_to_achieve",
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='taskforstudent',
-            name='question',
-            field=models.TextField(default='question'),
+            model_name="taskforstudent",
+            name="question",
+            field=models.TextField(default="question"),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='taskforstudent',
-            name='updated',
+            model_name="taskforstudent",
+            name="updated",
             field=models.DateTimeField(auto_now=True),
         ),
     ]

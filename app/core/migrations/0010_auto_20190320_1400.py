@@ -7,52 +7,66 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0009_auto_20190319_2043'),
-    ]
+    dependencies = [("core", "0009_auto_20190319_2043")]
 
     operations = [
         migrations.CreateModel(
-            name='StudentGrade',
+            name="StudentGrade",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('updated', models.DateTimeField(auto_now=True)),
-                ('grade', models.FloatField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("updated", models.DateTimeField(auto_now=True)),
+                ("grade", models.FloatField()),
             ],
-            options={
-                'abstract': False,
-            },
+            options={"abstract": False},
         ),
         migrations.RenameField(
-            model_name='user',
-            old_name='name',
-            new_name='first_name',
+            model_name="user", old_name="name", new_name="first_name"
         ),
         migrations.AddField(
-            model_name='examsheetevaluation',
-            name='is_finished',
+            model_name="examsheetevaluation",
+            name="is_finished",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='user',
-            name='last_name',
-            field=models.CharField(default='Jurkiewicz', max_length=255),
+            model_name="user",
+            name="last_name",
+            field=models.CharField(default="Jurkiewicz", max_length=255),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='studentgrade',
-            name='exam',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='core.ExamSheetEvaluation'),
+            model_name="studentgrade",
+            name="exam",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core.ExamSheetEvaluation",
+            ),
         ),
         migrations.AddField(
-            model_name='studentgrade',
-            name='owner',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="studentgrade",
+            name="owner",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='studentgrade',
-            name='student',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='student_grade', to=settings.AUTH_USER_MODEL),
+            model_name="studentgrade",
+            name="student",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="student_grade",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

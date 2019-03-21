@@ -6,10 +6,8 @@ from . import views
 
 
 router = DefaultRouter()
-router.register('exams', views.ExamSheetEvalViewset, base_name='exam_eval')
+router.register("exams", views.ExamSheetEvalViewset, base_name="exam_eval")
 
-app_name = 'exam_sheet'
+app_name = "exam_sheet"
 
-urlpatterns = [
-    path('', include(router.urls))
-]
+urlpatterns = [path("", include(router.urls))]

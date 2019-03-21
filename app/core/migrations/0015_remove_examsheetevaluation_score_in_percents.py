@@ -5,13 +5,10 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0014_auto_20190320_2244'),
-    ]
+    dependencies = [("core", "0014_auto_20190320_2244")]
 
     operations = [
         migrations.RemoveField(
-            model_name='examsheetevaluation',
-            name='score_in_percents',
-        ),
+            model_name="examsheetevaluation", name="score_in_percents"
+        )
     ]

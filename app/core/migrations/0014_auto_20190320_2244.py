@@ -5,17 +5,13 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0013_auto_20190320_2159'),
-    ]
+    dependencies = [("core", "0013_auto_20190320_2159")]
 
     operations = [
         migrations.AlterModelOptions(
-            name='examsheetevaluation',
-            options={'ordering': ('-created',)},
+            name="examsheetevaluation", options={"ordering": ("-created",)}
         ),
         migrations.AlterModelOptions(
-            name='studentgrade',
-            options={'ordering': ('-created',)},
+            name="studentgrade", options={"ordering": ("-created",)}
         ),
     ]

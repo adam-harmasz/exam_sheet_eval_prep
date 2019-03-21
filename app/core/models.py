@@ -34,6 +34,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model using email instead of username"""
+
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -43,24 +44,24 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
 
 
 class BaseModel(models.Model):
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              on_delete=models.CASCADE,
-                              blank=True,
-                              null=True)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
-        ordering = ('-created',)
+        ordering = ("-created",)
 
 
 class BaseExamSheet(BaseModel):
     """Base abstract class for ExamSheet and ExamSheetForStudent models"""
+
     name = models.CharField(max_length=255)
     total_points = models.IntegerField(null=True, blank=True)
     is_finished = models.BooleanField(default=False)
@@ -70,28 +71,33 @@ class BaseExamSheet(BaseModel):
 
     def __str__(self):
         """String representation of the object"""
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class ExamSheet(BaseExamSheet):
     """Model handling Exam sheet objects"""
+
     number_of_copies = models.IntegerField(null=True, blank=True)
 
 
 class ExamSheetForStudent(BaseExamSheet):
     """Model to create exam sheets for students objects """
-    student = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE,
-                                related_name='student_exam',
-                                null=True,
-                                blank=True,)
-    exam_sheet_origin = models.ForeignKey('ExamSheet',
-                                          on_delete=models.CASCADE,
-                                          related_name='student_exam_sheet')
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="student_exam",
+        null=True,
+        blank=True,
+    )
+    exam_sheet_origin = models.ForeignKey(
+        "ExamSheet", on_delete=models.CASCADE, related_name="student_exam_sheet"
+    )
 
 
 class BaseAnswer(BaseModel):
     """Abstract base model for Answer and AnswerForStudent models"""
+
     answer = models.CharField(max_length=255)
     is_correct = models.BooleanField(null=True, blank=True)
 
@@ -100,29 +106,36 @@ class BaseAnswer(BaseModel):
 
     def __str__(self):
         """String representation of the object"""
-        return f'{self.answer}'
+        return f"{self.answer}"
 
 
 class Answer(BaseAnswer):
     """Model handling answer objects related to Task objects"""
-    task = models.ForeignKey('Task',
-                              on_delete=models.CASCADE,
-                              related_name='task_answer',
-                              null=True,
-                              blank=True)
+
+    task = models.ForeignKey(
+        "Task",
+        on_delete=models.CASCADE,
+        related_name="task_answer",
+        null=True,
+        blank=True,
+    )
 
 
 class AnswerForStudent(BaseAnswer):
     """Model handling answer objects related to Task objects"""
-    task = models.ForeignKey('TaskForStudent',
-                              on_delete=models.CASCADE,
-                              related_name='student_task_answer',
-                              null=True,
-                              blank=True)
+
+    task = models.ForeignKey(
+        "TaskForStudent",
+        on_delete=models.CASCADE,
+        related_name="student_task_answer",
+        null=True,
+        blank=True,
+    )
 
 
 class BaseTask(BaseModel):
     """Base abstract model for Task and TaskForStudents models"""
+
     name = models.CharField(max_length=255)
     question = models.TextField()
     points_to_achieve = models.IntegerField()
@@ -132,47 +145,45 @@ class BaseTask(BaseModel):
 
     def __str__(self):
         """String representation of the object"""
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Task(BaseTask):
     """Model handling Task objects"""
-    exam_sheet = models.ForeignKey('ExamSheet',
-                                   on_delete=models.CASCADE,
-                                   related_name='exam_task')
+
+    exam_sheet = models.ForeignKey(
+        "ExamSheet", on_delete=models.CASCADE, related_name="exam_task"
+    )
     is_open_task = models.BooleanField(default=False)
 
 
 class TaskForStudent(BaseTask):
     """Model handling TaskForStudent objects"""
-    exam_sheet_student = models.ForeignKey('ExamSheetForStudent',
-                                           on_delete=models.CASCADE,
-                                           related_name='student_exam_task')
+
+    exam_sheet_student = models.ForeignKey(
+        "ExamSheetForStudent",
+        on_delete=models.CASCADE,
+        related_name="student_exam_task",
+    )
     students_answer = models.IntegerField(null=True, blank=True)
 
 
 class OpenTaskForStudent(BaseTask):
     """Model handling TaskForStudent objects"""
-    exam_sheet_student = models.ForeignKey('ExamSheetForStudent',
-                                            on_delete=models.CASCADE,
-                                            related_name='open_exam_task')
+
+    exam_sheet_student = models.ForeignKey(
+        "ExamSheetForStudent", on_delete=models.CASCADE, related_name="open_exam_task"
+    )
     students_answer = models.TextField(null=True, blank=True)
 
 
 class ExamSheetEvaluation(BaseModel):
     """Model handling ExamSheetEvaluation objects"""
-    EXAM_GRADES = (
-        (1, 2),
-        (2, 2.5),
-        (3, 3),
-        (4, 3.5),
-        (5, 4),
-        (6, 4.5),
-        (7, 5)
+
+    EXAM_GRADES = ((1, 2), (2, 2.5), (3, 3), (4, 3.5), (5, 4), (6, 4.5), (7, 5))
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="students_exam"
     )
-    student = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE,
-                                related_name='students_exam')
     points_to_get = models.IntegerField()
     points_earned = models.IntegerField()
     grade = models.IntegerField(choices=EXAM_GRADES, null=True, blank=True)
@@ -181,30 +192,32 @@ class ExamSheetEvaluation(BaseModel):
 
     def __str__(self):
         """String representation of the object"""
-        return f'Exam evaluation - {self.student}'
+        return f"Exam evaluation - {self.student}"
 
 
 class TaskToEvaluate(BaseTask):
     """Model handling TaskToEvaluate objects"""
+
     students_answer = models.TextField()
     points_to_achieve = models.IntegerField(null=True, blank=True)
     points_earned = models.IntegerField(null=True, blank=True)
-    exam = models.ForeignKey('ExamSheetEvaluation',
-                             on_delete=models.CASCADE,
-                             related_name='exam_task_eval')
+    exam = models.ForeignKey(
+        "ExamSheetEvaluation", on_delete=models.CASCADE, related_name="exam_task_eval"
+    )
 
 
 class StudentGrade(BaseModel):
     """Model handling StudentGrade objects"""
-    student = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE,
-                                related_name='student_grade')
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="student_grade"
+    )
     grade = models.FloatField()
-    exam = models.OneToOneField('ExamSheetEvaluation', on_delete=models.CASCADE)
+    exam = models.OneToOneField("ExamSheetEvaluation", on_delete=models.CASCADE)
 
     def __str__(self):
         """String representation of the object"""
-        return f'{self.student} grade: {self.grade}'
+        return f"{self.student} grade: {self.grade}"
 
 
 # creating ExamSheetForStudent objects
