@@ -98,7 +98,12 @@ class ExamSheetEvalSerializer(serializers.ModelSerializer):
         """Validate points earned"""
         points_earned = attrs.get('points_earned')
         points_to_get = attrs.get('points_to_get')
+        grade = attrs.get('grade')
+        is_finished = attrs.get('is_finished')
         if points_earned > points_to_get:
             raise serializers.ValidationError(
                 'Field points earned cannot be bigger than points to get')
+        elif is_finished is True and grade is None:
+            raise serializers.ValidationError(
+                'Remember to set grade before test evaluation completion')
         return attrs
