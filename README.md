@@ -19,8 +19,8 @@ if you don't have it already, please visit this sites for further instruction:
 2. If you have docker applications installed type this commands to build docker container:  
 `docker build .`  
 `docker-compose build`  
-3. After that run migrations, and load data from fixtures with this command:  
-`python manage.py loaddata core/fixture/initial.json`
+3. After that populate database with command below:  
+`python manage.py populate_db`
 4. It's good idea to create superuser:  
 `python manage.py createsuperuser`
 
