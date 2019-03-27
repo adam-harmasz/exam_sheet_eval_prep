@@ -6,7 +6,9 @@ class IsOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         """Defining permission only for an owner of an object"""
-        return request.user == obj.owner
+        if request.user == obj.owner or request.user.is_superuser:
+            return True
+        return False
 
 
 class IsTeacher(permissions.BasePermission):
