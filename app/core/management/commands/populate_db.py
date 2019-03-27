@@ -12,25 +12,30 @@ class Command(BaseCommand):
     help = "Populate database"
 
     def handle(self, *args, **options):
+        """Populating database with mocked data"""
+
+        # creating user with is_teacher flag set True
         teacher = models.User.objects.create(
             email="teacher1@teacher1.pl",
             first_name="Janusz",
             last_name="Kowalski",
             is_teacher=True,
         )
+        # Creating normal user
         student = models.User.objects.create(
             email="student1@student1.pl",
             first_name="Andrzej",
             last_name="Nowak",
             is_teacher=False,
         )
-        exam1 = models.ExamSheet.objects.create(
+        models.ExamSheet.objects.create(
             owner=teacher, name="Exam 1", number_of_copies=2
         )
-        exam2 = models.ExamSheet.objects.create(
+        models.ExamSheet.objects.create(
             owner=teacher, name="Exam 2", number_of_copies=2
         )
         exams = models.ExamSheet.objects.all()
+        # creating tasks and answers for exam
         for exam in exams:
             task1 = models.Task.objects.create(
                 owner=teacher,
@@ -46,7 +51,7 @@ class Command(BaseCommand):
                 question="Question 2 Exam 1",
                 points_to_achieve=2,
             )
-            task3 = models.Task.objects.create(
+            models.Task.objects.create(
                 owner=teacher,
                 exam_sheet=exam,
                 name="Task 3",
@@ -54,7 +59,7 @@ class Command(BaseCommand):
                 points_to_achieve=10,
                 is_open_task=True,
             )
-            task4 = models.Task.objects.create(
+            models.Task.objects.create(
                 owner=teacher,
                 exam_sheet=exam,
                 name="Task 4",
@@ -85,8 +90,10 @@ class Command(BaseCommand):
                     )
             exam.is_finished = True
             exam.save()
+            # creating ExamSheetForStudent objects based on ExamSheet
             utils.util_create_student_exam(exam)
         student_exams = models.ExamSheetForStudent.objects.all()
+        # filling essential data for ExamSheetForStudent objects
         for s_exam in student_exams:
             s_exam.student = student
             tasks = s_exam.student_exam_task.all()
@@ -99,8 +106,10 @@ class Command(BaseCommand):
                 closed_task.save()
             s_exam.is_finished = True
             s_exam.save()
+            # Creating ExamSheetEvaluation object based on ExamSheetForStudent
             utils.util_create_exam_eval_sheet(s_exam)
         exams_to_eval = models.ExamSheetEvaluation.objects.all()
+        # filling essential data for ExamSheetEvaluation objects
         for e_exam in exams_to_eval:
             tasks_to_eval = e_exam.exam_task_eval.all()
             for task in tasks_to_eval:
@@ -111,4 +120,5 @@ class Command(BaseCommand):
             e_exam.grade = 5
             e_exam.is_finished = True
             e_exam.save()
+            # creating StudentGrade object based on ExamSheetEvaluation
             utils.util_create_grade(e_exam)
