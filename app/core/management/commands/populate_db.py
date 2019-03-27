@@ -16,14 +16,14 @@ class Command(BaseCommand):
 
         # creating user with is_teacher flag set True
         teacher = models.User.objects.create(
-            email="teacher1@teacher1.pl",
+            email=f"teacher{randint(0, 10000)}@teacher.pl",
             first_name="Janusz",
             last_name="Kowalski",
             is_teacher=True,
         )
         # Creating normal user
         student = models.User.objects.create(
-            email="student1@student1.pl",
+            email=f"student{randint(0, 10000)}@student.pl",
             first_name="Andrzej",
             last_name="Nowak",
             is_teacher=False,

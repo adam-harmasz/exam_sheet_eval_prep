@@ -20,9 +20,9 @@ if you don't have it already, please visit this sites for further instruction:
 `docker build .`  
 `docker-compose build`  
 3. After that populate database with command below:  
-`python manage.py populate_db`
+`docker-compose run app sh -c "python manage.py populate_db"`
 4. It's good idea to create superuser:  
-`python manage.py createsuperuser`
+`docker-compose run app sh -c "python manage.py createsuperuser"`
 
 ### USAGE
 
